@@ -1,0 +1,7 @@
+##fileformat=VCFv4.2
+##source=simutator, ref in this file is mutated genome. Mutations added: SNP_every_30
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	sample
+ref.1__simutator__SNP_every_30	30	.	T	C	.	PASS	.	GT	1/1
+ref.1__simutator__SNP_every_30	60	.	C	A	.	PASS	.	GT	1/1
+ref.2__simutator__SNP_every_30	30	.	A	C	.	PASS	.	GT	1/1
+ref.2__simutator__SNP_every_30	60	.	G	T	.	PASS	.	GT	1/1

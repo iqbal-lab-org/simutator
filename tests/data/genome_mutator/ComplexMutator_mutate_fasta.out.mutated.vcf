@@ -1,0 +1,7 @@
+##fileformat=VCFv4.2
+##source=simutator, ref in this file is mutated genome. Mutations added: COMPLEX_length_10_every_30_snps_2_del_2_ins_1_maxindel_2
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	sample
+ref.1__simutator__COMPLEX_length_10_every_30_snps_2_del_2_ins_1_maxindel_2	30	.	AATTATGTGT	ATTACGGTGC	.	PASS	.	GT	1/1
+ref.1__simutator__COMPLEX_length_10_every_30_snps_2_del_2_ins_1_maxindel_2	60	.	GTATTTTAA	GATTGGTAAT	.	PASS	.	GT	1/1
+ref.2__simutator__COMPLEX_length_10_every_30_snps_2_del_2_ins_1_maxindel_2	30	.	GGTCGCGAG	GATACACGAG	.	PASS	.	GT	1/1
+ref.2__simutator__COMPLEX_length_10_every_30_snps_2_del_2_ins_1_maxindel_2	59	.	CAGATAGCTC	CACGAGACTC	.	PASS	.	GT	1/1
