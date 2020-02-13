@@ -82,9 +82,15 @@ class GenomeMutator(metaclass=abc.ABCMeta):
                 mutated_seq_lengths[mutated_seq.id] = len(mutated_seq)
                 all_mutations[(sequence.id, mutated_seq.id)] = mutations
 
-        with open(vcf_out_wrt_original_seq, "w") as f_vcf_original, open(vcf_out_wrt_mutated_seq, "w") as f_vcf_mutated:
-            self._write_vcf_header(f_vcf_original, original_seq_lengths, mutated_genome=False)
-            self._write_vcf_header(f_vcf_mutated, mutated_seq_lengths, mutated_genome=True)
+        with open(vcf_out_wrt_original_seq, "w") as f_vcf_original, open(
+            vcf_out_wrt_mutated_seq, "w"
+        ) as f_vcf_mutated:
+            self._write_vcf_header(
+                f_vcf_original, original_seq_lengths, mutated_genome=False
+            )
+            self._write_vcf_header(
+                f_vcf_mutated, mutated_seq_lengths, mutated_genome=True
+            )
 
             for seq_id, mutated_seq_id in sorted(all_mutations):
                 for mutation in all_mutations[(seq_id, mutated_seq_id)]:
@@ -116,7 +122,6 @@ class GenomeMutator(metaclass=abc.ABCMeta):
                         sep="\t",
                         file=f_vcf_original,
                     )
-
 
     def _get_snp_variant(self, ref_nucleotide):
         global random

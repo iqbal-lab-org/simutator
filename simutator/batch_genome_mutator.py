@@ -16,14 +16,16 @@ def _parse_complex_option_string(s):
     for x in s.split(","):
         print("WTF", x)
         dist, length, snps, ins, dels, max_indel = [int(y) for y in x.split(":")]
-        complex_vars.append({
-            "dist": dist,
-            "len": length,
-            "snp": snps,
-            "ins": ins,
-            "del": dels,
-            "max_indel_len": max_indel,
-        })
+        complex_vars.append(
+            {
+                "dist": dist,
+                "len": length,
+                "snp": snps,
+                "ins": ins,
+                "del": dels,
+                "max_indel_len": max_indel,
+            }
+        )
     return complex_vars
 
 
@@ -55,7 +57,9 @@ def mutations_from_options(options):
             raise ValueError(f"Cannot parse --complex option: '{options.complex}'")
 
     if len(mutations) == 0:
-        raise RuntimeError("Must use at least one of the options --snps, --dels, --ins, --complex")
+        raise RuntimeError(
+            "Must use at least one of the options --snps, --dels, --ins, --complex"
+        )
 
     return mutations
 
@@ -66,9 +70,13 @@ def run_all_mutations(fasta_in, outprefix, mutations, seed=None):
             if mutation_type == "snp":
                 mutator = genome_mutator.SnpMutator(mutation["dist"], seed=seed)
             elif mutation_type == "insertion":
-                mutator = genome_mutator.InsertionMutator(mutation["dist"], mutation["len"], seed=seed)
+                mutator = genome_mutator.InsertionMutator(
+                    mutation["dist"], mutation["len"], seed=seed
+                )
             elif mutation_type == "deletion":
-                mutator = genome_mutator.DeletionMutator(mutation["dist"], mutation["len"], seed=seed)
+                mutator = genome_mutator.DeletionMutator(
+                    mutation["dist"], mutation["len"], seed=seed
+                )
             elif mutation_type == "complex":
                 mutator = genome_mutator.ComplexMutator(
                     mutation["dist"],
@@ -80,6 +88,12 @@ def run_all_mutations(fasta_in, outprefix, mutations, seed=None):
                     seed=seed,
                 )
 
-            this_prefix = f"{outprefix}.{mutation_type}." + ".".join([k + "-" + str(v) for k,v in sorted(mutation.items())])
-            mutator.mutate_fasta_file(fasta_in, f"{this_prefix}.fa", f"{this_prefix}.original.vcf", f"{this_prefix}.mutated.vcf")
-
+            this_prefix = f"{outprefix}.{mutation_type}." + ".".join(
+                [k + "-" + str(v) for k, v in sorted(mutation.items())]
+            )
+            mutator.mutate_fasta_file(
+                fasta_in,
+                f"{this_prefix}.fa",
+                f"{this_prefix}.original.vcf",
+                f"{this_prefix}.mutated.vcf",
+            )

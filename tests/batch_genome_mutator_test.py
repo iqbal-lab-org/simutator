@@ -23,7 +23,9 @@ def test_parse_complex_option_string():
     with pytest.raises(ValueError):
         batch_genome_mutator._parse_complex_option_string("totally_unexpected")
 
-    got = batch_genome_mutator._parse_complex_option_string("1000:10:1:2:3:4,500:20:2:3:4:5")
+    got = batch_genome_mutator._parse_complex_option_string(
+        "1000:10:1:2:3:4,500:20:2:3:4:5"
+    )
     expect = [
         {"dist": 1000, "len": 10, "snp": 1, "ins": 2, "del": 3, "max_indel_len": 4},
         {"dist": 500, "len": 20, "snp": 2, "ins": 3, "del": 4, "max_indel_len": 5},
@@ -34,10 +36,12 @@ def test_parse_complex_option_string():
 def test_run_all_mutations():
     infile = os.path.join(data_dir, "run_all_mutations.fa")
     mutations = {
-            "snp": [{"dist": 200}, {"dist": 300}],
-            "ins": [{"dist": 200, "len": 10}],
-            "del": [{"dist": 250, "len": 5}],
-            "complex": [{"dist": 500, "len": 20, "snp": 2, "ins": 3, "del": 4, "max_indel_len": 5}],
+        "snp": [{"dist": 200}, {"dist": 300}],
+        "ins": [{"dist": 200, "len": 10}],
+        "del": [{"dist": 250, "len": 5}],
+        "complex": [
+            {"dist": 500, "len": 20, "snp": 2, "ins": 3, "del": 4, "max_indel_len": 5}
+        ],
     }
     outdir = "tmp.run_all_mutations"
     if os.path.exists(outdir):
@@ -46,13 +50,16 @@ def test_run_all_mutations():
     outprefix = os.path.join(outdir, "out")
     batch_genome_mutator.run_all_mutations(infile, outprefix, mutations)
 
-    expect_prefixes = [outprefix + "." + x for x in [
-        "complex.del-4.dist-500.ins-3.len-20.max_indel_len-5.snp-2",
-        "del.dist-250.len-5",
-        "ins.dist-200.len-10",
-        "snp.dist-200",
-        "snp.dist-300",
-    ]]
+    expect_prefixes = [
+        outprefix + "." + x
+        for x in [
+            "complex.del-4.dist-500.ins-3.len-20.max_indel_len-5.snp-2",
+            "del.dist-250.len-5",
+            "ins.dist-200.len-10",
+            "snp.dist-200",
+            "snp.dist-300",
+        ]
+    ]
 
     for prefix in expect_prefixes:
         for suffix in "fa", "mutated.vcf", "original.vcf":
