@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/iqbal-lab-org/simutator.svg?branch=master)](https://travis-ci.com/iqbal-lab-org/simutator)
+
 # simutator
 
 Simulate mutations in genomes.
