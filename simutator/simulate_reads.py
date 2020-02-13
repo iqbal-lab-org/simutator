@@ -1,3 +1,5 @@
+import itertools
+import logging
 import os
 import shutil
 import tempfile
@@ -61,3 +63,51 @@ def simulate_illumina_paired_reads_from_fasta(
 
     os.rmdir(tmpdir)
     return tuple(reads_files)
+
+
+def iterative_simulate_reads(
+    ref_fasta,
+    outprefix,
+    sequencing_machines,
+    read_lengths,
+    read_depths,
+    fragment_lengths,
+    fragment_length_sd,
+    random_seed=42,
+):
+    files = []
+
+    for machine, read_len, depth, frag_len in itertools.product(
+        sequencing_machines, read_lengths, read_depths, fragment_lengths
+    ):
+        this_prefix = (
+            f"{outprefix}.{machine}.{read_len}.{depth}.{frag_len}.{fragment_length_sd}"
+        )
+        logging.info(
+            "Simulate reads. ref={ref_fasta}, machine={machine}, read length={read_len}, read depth={depth}, fragment length={frag_len}, fragment length sd={fragment_length_sd}"
+        )
+
+        reads_files = simulate_illumina_paired_reads_from_fasta(
+            ref_fasta,
+            this_prefix,
+            sequencing_machine=machine,
+            read_length=read_len,
+            read_depth=depth,
+            mean_fragment_length=frag_len,
+            fragment_length_sd=fragment_length_sd,
+            random_seed=random_seed,
+        )
+
+        files.append(
+            {
+                "fastq1": reads_files[0],
+                "fastq2": reads_files[1],
+                "machine": machine,
+                "read_length": read_len,
+                "read_depth": depth,
+                "fragment_length": frag_len,
+                "fragment_length_sd": fragment_length_sd,
+            }
+        )
+
+    return files
