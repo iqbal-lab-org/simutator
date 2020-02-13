@@ -38,9 +38,11 @@ class GenomeMutator(metaclass=abc.ABCMeta):
             + self._mutation_description_string()
         )
 
-    def _write_vcf_header(self, filehandle, mutated_genome=False):
+    def _write_vcf_header(self, filehandle, seq_lengths, mutated_genome=False):
         print("##fileformat=VCFv4.2", file=filehandle)
         print(self._vcf_source_line(mutated_genome=mutated_genome), file=filehandle)
+        for name, length in sorted(seq_lengths.items()):
+            print(f"##contig=<ID={name},length={length}>", file=filehandle)
         print(
             "#CHROM",
             "POS",
@@ -64,12 +66,11 @@ class GenomeMutator(metaclass=abc.ABCMeta):
         self, fasta_in, fasta_out, vcf_out_wrt_original_seq, vcf_out_wrt_mutated_seq
     ):
         file_reader = pyfastaq.sequences.file_reader(fasta_in)
-        with open(fasta_out, "w") as f_fasta, open(
-            vcf_out_wrt_original_seq, "w"
-        ) as f_vcf_original, open(vcf_out_wrt_mutated_seq, "w") as f_vcf_mutated:
-            self._write_vcf_header(f_vcf_original, mutated_genome=False)
-            self._write_vcf_header(f_vcf_mutated, mutated_genome=True)
+        original_seq_lengths = {}
+        mutated_seq_lengths = {}
+        all_mutations = {}
 
+        with open(fasta_out, "w") as f_fasta:
             for sequence in file_reader:
                 mutations, mutated_seq = self.mutate_sequence(sequence)
                 mutated_seq = pyfastaq.sequences.Fasta(
@@ -77,9 +78,18 @@ class GenomeMutator(metaclass=abc.ABCMeta):
                     mutated_seq,
                 )
                 print(mutated_seq, file=f_fasta)
-                for mutation in mutations:
+                original_seq_lengths[sequence.id] = len(sequence)
+                mutated_seq_lengths[mutated_seq.id] = len(mutated_seq)
+                all_mutations[(sequence.id, mutated_seq.id)] = mutations
+
+        with open(vcf_out_wrt_original_seq, "w") as f_vcf_original, open(vcf_out_wrt_mutated_seq, "w") as f_vcf_mutated:
+            self._write_vcf_header(f_vcf_original, original_seq_lengths, mutated_genome=False)
+            self._write_vcf_header(f_vcf_mutated, mutated_seq_lengths, mutated_genome=True)
+
+            for seq_id, mutated_seq_id in sorted(all_mutations):
+                for mutation in all_mutations[(seq_id, mutated_seq_id)]:
                     print(
-                        mutated_seq.id,
+                        mutated_seq_id,
                         mutation.new_position + 1,
                         ".",
                         mutation.new_seq,
@@ -93,7 +103,7 @@ class GenomeMutator(metaclass=abc.ABCMeta):
                         file=f_vcf_mutated,
                     )
                     print(
-                        sequence.id,
+                        seq_id,
                         mutation.original_position + 1,
                         ".",
                         mutation.original_seq,
@@ -106,6 +116,7 @@ class GenomeMutator(metaclass=abc.ABCMeta):
                         sep="\t",
                         file=f_vcf_original,
                     )
+
 
     def _get_snp_variant(self, ref_nucleotide):
         global random

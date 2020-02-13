@@ -1,5 +1,7 @@
 ##fileformat=VCFv4.2
 ##source=simutator, ref in this file is original genome. Mutations added: COMPLEX_length_10_every_30_snps_2_del_2_ins_1_maxindel_2
+##contig=<ID=ref.1,length=100>
+##contig=<ID=ref.2,length=100>
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	sample
 ref.1	30	.	ATTACGGTGC	AATTATGTGT	.	PASS	.	GT	1/1
 ref.1	60	.	GATTGGTAAT	GTATTTTAA	.	PASS	.	GT	1/1
