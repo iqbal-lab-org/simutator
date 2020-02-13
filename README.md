@@ -25,6 +25,14 @@ It will install the script `simutator`.
 
 Run `tox` to run all the tests.
 
+
+## Reproducibility
+
+Both commands below are by default non-deterministic.
+However, both have a `--seed` option, which you should use if you want to
+make reproducible runs from the same input data. For example, run everything
+with `--seed 42`.
+
 ## Make mutated genomes
 
 The general command is
