@@ -1,6 +1,5 @@
 import abc
 import collections
-import os
 from random import Random
 
 import pyfastaq
