@@ -67,7 +67,9 @@ def mutations_from_options(options):
 def run_all_mutations(fasta_in, outprefix, mutations, seed=None):
     for mutation_type, mutations_list in mutations.items():
         for mutation in mutations_list:
-            logging.info(f"Simulating mutations of type '{mutation_type}' with parameters {mutation}")
+            logging.info(
+                f"Simulating mutations of type '{mutation_type}' with parameters {mutation}"
+            )
             if mutation_type == "snp":
                 mutator = genome_mutator.SnpMutator(mutation["dist"], seed=seed)
             elif mutation_type == "insertion":
