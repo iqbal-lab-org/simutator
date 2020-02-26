@@ -50,7 +50,7 @@ At least one of these options must be used: `--snps`, `--dels`, `--ins`,
 Simulate a SNP every 100bp with
 
 ```
-mutate_fasta --snps 100 in.fasta out
+simutator mutate_fasta --snps 100 in.fasta out
 ```
 
 This will write three output files:
