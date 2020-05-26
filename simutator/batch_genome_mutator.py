@@ -14,7 +14,6 @@ def _parse_indels_option_string(s):
 def _parse_complex_option_string(s):
     complex_vars = []
     for x in s.split(","):
-        print("WTF", x)
         dist, length, snps, ins, dels, max_indel = [int(y) for y in x.split(":")]
         complex_vars.append(
             {
