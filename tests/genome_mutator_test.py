@@ -46,7 +46,7 @@ def test_SnpMutator_mutate_fasta_file():
     os.unlink(tmp_out_vcf_mutated)
 
 
-def test_DeletionMutator_mutate_sequence():
+def test_DeletionMutator_mutate_sequence_del_length_1():
     mutator = genome_mutator.DeletionMutator(3, 1)
     original_seq = "1234567890ABCDE"
     sequence = pyfastaq.sequences.Fasta("name", original_seq)
@@ -61,6 +61,19 @@ def test_DeletionMutator_mutate_sequence():
     ]
     assert got_mutations == expect_mutations
 
+
+def test_DeletionMutator_mutate_sequence_del_length_2():
+    mutator = genome_mutator.DeletionMutator(5, 2)
+    original_seq = "1234567890ABCDEF"
+    sequence = pyfastaq.sequences.Fasta("name", original_seq)
+    got_mutations, got_sequence = mutator.mutate_sequence(sequence)
+    assert sequence.seq == original_seq
+    assert got_sequence == "12347890CDEF"
+    expect_mutations = [
+        genome_mutator.Mutation(3, 3, "456", "4"),
+        genome_mutator.Mutation(9, 7, "0AB", "0"),
+    ]
+    assert got_mutations == expect_mutations
 
 def test_DeletionMutator_mutate_fasta_file():
     infile = os.path.join(data_dir, "DeletionMutator_mutate_fasta.in.fa")
