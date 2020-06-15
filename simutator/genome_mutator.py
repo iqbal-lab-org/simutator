@@ -179,7 +179,7 @@ class DeletionMutator(GenomeMutator):
                     current_position - 1,
                     current_position - deleted_nucleotides - 1,
                     sequence.seq[current_position - 1 : deletion_end_position + 1],
-                    sequence.seq[current_position - 1 : deletion_end_position],
+                    sequence.seq[current_position - 1],
                 )
             )
             current_position = next_start_position
